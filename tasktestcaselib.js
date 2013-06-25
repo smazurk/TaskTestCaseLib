@@ -114,10 +114,6 @@ var applyTemplate = function() {
                 
                 buildTable = function($table){
                 
-               
-                
-                
-                
                 $.ajax({
                         
                 type: 'GET',
@@ -127,27 +123,47 @@ var applyTemplate = function() {
 				success: function(data) {
                                         console.log(data);                 
                                         $.each(data.items, function(k,item) {
-						
-                         			//setup elements for info table row
-                				var infotr = $('<tr class="info-line"></tr>');
-                            			
-                            			//controls when template name is clicked.
-                              			//infotr.append($('<td class="td-name"><div class="tm-name"><span contenteditable="true">' + item.publicData.name + '</span></div></td>').click(function() {
 
-						infotr.append($('<td class="td-name"><div class="tm-name"></div></td>').click(function() {                                                                                                                                                                      
+	     
+                                                
+                              			$table.append(buildInfoRow(item));
+                                                $table.append(buildEditRow(item));
+                                		
+                                		console.log(item.key);
+                                  		console.log(item.publicData);
+//                                              //console.log();
+                                
+				        });    
+                                        
+				}
+                });
+                                        
+           
+		};
+                
+                
+                buildInfoRow = function(item){
+                
+                //setup elements for info table row
+			var infotr = $('<tr class="info-line"></tr>');
+			
+                    	//controls when template name is clicked.
+
+			infotr.append($('<td class="td-name"><div class="tm-name"></div></td>').click(function() {                                                                                                                                                                      
 							
-							$(this).parent().siblings(".info-line").removeClass('active');                                                                                                                                                                                                          
-                                                        $(this).parent().addClass("active");
-                                			$(this).parent().siblings(".edit-line").removeAttr('style');                                                                                                                                                                                                                                        
-                                                      	$(this).parent().next().css("display","table-row");
-          	      					debug("Template TD Clicked");
-                                                }));
+				$(this).parent().siblings(".info-line").removeClass('active');                                                                                                                                                                                                          
+                                $(this).parent().addClass("active");
+                                $(this).parent().siblings(".edit-line").removeAttr('style');                                                                                                                                                                                                                                        
+                                $(this).parent().next().css("display","table-row");
+          	      		debug("Template TD Clicked");
+			}));
                                 		
                                                 
-                                          	//Used for changing template name
+                        //Used for changing template name
                                             
-                                            	var templatename = $('<span contenteditable="false">' + item.publicData.name + '</span>').click(function() {
-                                                        //Only enable when edit line is visible
+                       var templatename = $('<span contenteditable="false">' + item.publicData.name + '</span>').click(function() {
+                       
+			//Only enable when edit line is visible
                                                         if($(this).parents(".info-line").next().css('display') != "none"){
 								$(this).parent().addClass("edit-mode");                                                                                                              
 							        $(this).attr('contentEditable', true);
@@ -177,58 +193,139 @@ var applyTemplate = function() {
                                                             }
 					    	});
                                                 
-                                          	infotr.find(".tm-name").append(templatename);
+			infotr.find(".tm-name").append(templatename);
                                                 
-                                		infotr.append('<td class="td-entities"><span class="entity-icon entity-task">T</span><span class="counter">' + item.publicData.taskCount + '</span></td>');
-                                  		infotr.append('<td class="td-entities"><span class="entity-icon entity-test-case">TC</span><span class="counter">' + item.publicData.testCaseCount + '</span></td>');
+			infotr.append('<td class="td-entities"><span class="entity-icon entity-task">T</span><span class="counter">' + item.publicData.taskCount + '</span></td>');
+			
+                        infotr.append('<td class="td-entities"><span class="entity-icon entity-test-case">TC</span><span class="counter">' + item.publicData.testCaseCount + '</span></td>');
                                     		  		
-                                        	var actions = $('<td class="td-actions"></td>');
+			var actions = $('<td class="td-actions"></td>');
                                       	
-                                      		actions.append($('<button class="tau-btn tau-attention">Delete</button>').click(function() {
-							removeTemplate(item.key);
-          	      					debug("Delete button pressed");
-                                                }));
+			actions.append($('<button class="tau-btn tau-attention">Delete</button>').click(function() {
+				removeTemplate(item.key);
+				debug("Delete button pressed");
+			}));
                                           
                                           	
-                                        	actions.append($('<button class="tau-btn tau-primary">Apply template</button>').click(function() {
-          	      					console.log("Apply!");
-                                                }));
+			actions.append($('<button class="tau-btn tau-primary">Apply template</button>').click(function() {
+				console.log("Apply!");
+			}));
                                           
-                                          	infotr.append(actions);
-                              			
-                                              	/*
-                                                =-=-=-=-=-=-=-=-=-=-=-=-=-
-                                                End of Info Row actions
-                                                =-=-=-=-=-=-=-=-=-=-=-=-=-
-                                                */
-						
-                                                /*
-                                                =-=-=-=-=-=-=-=-=-=-=-=-=-
-                                                Start of TASK actions
-                                                =-=-=-=-=-=-=-=-=-=-=-=-=-
-                                                */ 
+			infotr.append(actions);                   
+                
+			return infotr;     
+		};
+                
+                
+                
+                buildEditRow = function(item){
+                                              
+                        var edittr = $('<tr class="edit-line"></tr>');                         
+                                                
+                                                
+                                                
+                        edittr.append(buildTasks(item));
+			edittr.append(buildTestCases(item));                              
+                                              
+                 	return(edittr);                             
+		};
+                
+                
+                /*
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		 Start of TASK actions
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		*/
+                
+                buildTasks = function (item){
+                                               	 
                                                 
                                               
-                                              	var edittr = $('<tr class="edit-line"></tr>');
-                                              	var tasktd = $('<td class="td-task" colspan="3"></td>');
-                                              	var testcasetd = $('<td class="td-test-case"></td>');
+			
+			var tasktd = $('<td class="td-task" colspan="3"></td>');                        
+   			tasktd.append('<div class="tm-caption"><b class="task">Tasks</b><span class="counter">' + item.publicData.taskCount + '</span></div>');
                                                 
-                                                tasktd.append('<div class="tm-caption"><b class="task">Tasks</b><span class="counter">' + item.publicData.taskCount + '</span></div>');
-                                                
-                                                
+                                                var tasks = $.parseJSON(item.publicData.tasks);
                                                 
 
                                                 
-                                                var taskactions = $('<button class="tau-btn tau-btn-small tau-success"></button>').click(function() {
-                                                                                                                                                     
-                                                        $(this).parent().parent().children('.tm-body').prepend('<div class="tm-item"><div class="view-mode active"><div class="entity-name placeholder"><span contenteditable="true">Name</span></div><div class="edit-block"><div class="note">Description</div><div class="description" contenteditable="true"></div><div class="action-buttons"><button class="tau-btn tau-success left">Add task</button><button class="tau-btn tau-attention right">Cancel</button></div></div></div></div>');
-                                                        $(this).attr("disabled", true);                                                                                            
-							debug('Add task Clicked');
+                                                var newtask = $('<button class="tau-btn tau-btn-small tau-success"></button>').click(function() {
+                                                	
+                                                                                                                                     
+                                                                                                                                     
+                                                                                                                                     
+                                                                                                                                 
+                                                        //build object for when a new task is created.                                                                             
+                                                        var taskline = $('<div class="tm-item"></div>').click(function(){
+                                                        	console.log('tm-item clicked');
+                                                        });
+                                  
+                                                        taskline.append('<div class="view-mode active"><div class="entity-name placeholder"></div><div class="edit-block"><div class="note">Description</div><div class="description" contenteditable="true"></div><div class="action-buttons"></div></div></div>');                                                                             
+                                                        
+                                      			$(this).parent().parent().children('.tm-body').prepend(taskline);
+                                                       	
+                                        		
+                                        
+                                        		$(this).attr("disabled", true);
+                                        		
+                                            		var taskname = $('<span contenteditable="true">Name</span>').click(function() {
+                                                                                                                                       
+                                                                                                                                 
+                                                		debug('TaskName Clicked');                                                                                   
+							});
+                                              	
+                                                	
+                                                
+                                                	$(this).parents('.td-task').find('.entity-name.placeholder').append(taskname);
+                                                
+                                            
+                                        		var addtask = $('<button class="tau-btn tau-success left">Add task</button>').click(function() {
+                                                                
+                                                                debug('Add Task Clicked');                                                                            
+                                                                var taskname = $(this).parents('.tm-item').find('.entity-name > span').text();
+                                                		var taskdesc = $(this).parents('.edit-block').children('.description').text();
+                                                                
+                                                    		//TODO: Make sure they are not blank
+                                                                if(true){
+                                                                         
+                                                        		tasks.push({"Name" : taskname,"Description" : taskdesc});
+                                                        		
+									debug(tasks);
+                               
+                                                            		saveTasks(tasks, item.key, item.publicData);
+                                                               		$(this).parents('.td-task').find('.tm-caption > button').attr("disabled",false);
+									$(this).parents('.tm-item').children('.view-mode').removeClass("active");
+                                                                  	//Update Task Counts
+                                                                	$(this).parents('.td-task').find('.counter').text(item.publicData.taskCount);
+
+                                                                    	$(this).parents('.edit-line').prev().find('.td-entities > .entity-task').next().text(item.publicData.taskCount);
+                                                                    	
+                                                                	
+                                                                }                                                                                
+                                                                                                                                            
+							});
+                                                
+							var canceltask = $('<button class="tau-btn tau-attention right">Cancel</button>').click(function() {
+								debug('Cancel Task Clicked');
+                                                                //TODO:  Have cancel enable button newtask
+	                                                        $(this).parents('.td-task').find('.tm-caption > button').attr("disabled",false);
+	                                                       	$(this).parents('.tm-item').remove();
+							});
+                                                
+                                                	$(this).parent().parent().find('.action-buttons').append(addtask);
+	                                                $(this).parent().parent().find('.action-buttons').append(canceltask);
+							
+	                                               
                                                 });
                                                 
-                                                tasktd.children('.tm-caption').append(taskactions);
+                                                tasktd.children('.tm-caption').append(newtask);
+                                        	
                                                 
-                                                var tasks = $.parseJSON(item.publicData.tasks);
+                                                
+	                                        
+                                                
+                                                
+                                                
                                                 
                                                 debug('=== Start Task List ===');
                                                 debug(tasks);
@@ -240,56 +337,96 @@ var applyTemplate = function() {
                                                 tasktd.append('<div class="tm-body"></div>');
                                                 
                                                 for (var i = 0; i < tasks.length; i++) {
-    							var task = tasks[i];
-                                                  	taskitem = $('<div class="tm-item"><div class="view-mode"><div class="entity-name"><span>' + task.Name  + '</span></div><div class="edit-block">[edit mode...]</div></div></div>');
-                                                  	tasktd.children('.tm-body').append(taskitem);                                                	
+    							
+                                                	var task = tasks[i];
+                                                  	tasktd.children('.tm-body').append(buildTask(task));                                                	
+                                                    
 						}
                                                 
                                                 debug('=== End Build Task List==='); 
                                                 
-                                                                                              
                                                 
-                                                
-                                                
-                                                
-                                                
-                                              	/*
-                                                =-=-=-=-=-=-=-=-=-=-=-=-=-
-                                                End of TASK actions
-                                                =-=-=-=-=-=-=-=-=-=-=-=-=-
-                                                */                                                
-                                                
-                                                testcasetd.append('<div class="tm-caption"><b class="test-case">Test Cases</b><span class="counter">' + item.publicData.testCaseCount + '</span><button class="tau-btn tau-btn-small tau-success"></button></div><div class="tm-body"><div class="tm-item"><div class="view-mode"><div class="entity-name"><span>Quick link to states settings from board</span></div><div class="edit-block">[edit mode...]</div></div></div><div class="tm-item"><div class="view-mode"><div class="entity-name"><span>Quick link to states settings from board</span></div><div class="edit-block">[edit mode...]</div></div></div><div class="tm-item"><div class="view-mode"><div class="entity-name"><span>Quick link to states settings from board</span></div><div class="edit-block">[edit mode...]</div></div></div></div>');
-                                                
-                                        	edittr.append(tasktd);
-                                        	edittr.append(testcasetd);
-                              			
-                                                
-                                                
-                                                
-                                                
-                              			$table.append(infotr);
-                                		$table.append(edittr);
-                                                
-                                		console.log(item.key);
-                                  		console.log(item.publicData);
-//                                              //console.log();
-                                
-				        });    
-                                        
-				}
-                });
-                                        
-           
+			return tasktd;
+                                             
 		};
                 
                 
+                
+                
+                buildTask = function(task){
+                                           
+                 	taskitem = $('<div class="tm-item"></div>').click(function(){
+                        
+                                                                          
+					debug("task item clicked (gogo edit mode)");
+                                        $(this).find('.view-mode').addClass("active");                                             
+                        });    
+                
+                
+                	taskitem.append('<div class="view-mode"><div class="entity-name"><span>' + task.Name  + '</span></div><div class="edit-block"><div class="note">Description</div><div class="description" contenteditable="true"></div><div class="action-buttons"><button class="tau-btn tau-success left">Add task</button><button class="tau-btn tau-attention right">Cancel</button></div></div></div>');
+                  			var savetask = $('<button class="tau-btn tau-success left">Save task</button>').click(function() {
+                                                                
+                                                                debug('Add Task Clicked');                                                                            
+                                                                var taskname = $(this).parents('.tm-item').find('.entity-name > span').text();
+                                                		var taskdesc = $(this).parents('.edit-block').children('.description').text();
+                                                                
+                                                    		//TODO: Make sure they are not blank
+                                                                if(true){
+                                                                         
+                              
+                               
+                                                            		saveTasks(tasks, item.key, item.publicData);
+                                                               		
+									$(this).parents('.tm-item').children('.view-mode').removeClass("active");
+                                                                  	//Update Task Counts
+                                                                	$(this).parents('.td-task').find('.counter').text(item.publicData.taskCount);
+
+                                                                    	$(this).parents('.edit-line').prev().find('.td-entities > .entity-task').next().text(item.publicData.taskCount);
+                                                                    	
+                                                                	
+                                                                }                                                                                
+                                                                                                                                            
+							});
+                                                
+							var deletetask = $('<button class="tau-btn tau-attention right">Delete</button>').click(function() {
+								debug('Cancel Task Clicked');
+                                                                //TODO:  Have cancel enable button newtask
+	                                                        $(this).parents('.td-task').find('.tm-caption > button').attr("disabled",false);
+	                                                       	$(this).parents('.tm-item').remove();
+							});
+                                                
+                      	taskitem.find('.action-buttons').append(savetask);
+                        taskitem.find('.action-buttons').append(deletetask);
+                  	
+                        return taskitem;                   
+		};
+                
+                /*
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		 Start of TESTCASE actions
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		*/                
+                
+                buildTestCases = function(item){
+                                                 
+			var testcasetd = $('<td class="td-test-case"></td>');                                                 
+                	testcasetd.append('<div class="tm-caption"><b class="test-case">Test Cases</b><span class="counter">' + item.publicData.testCaseCount + '</span><button class="tau-btn tau-btn-small tau-success"></button></div><div class="tm-body"><div class="tm-item"><div class="view-mode"><div class="entity-name"><span>Quick link to states settings from board</span></div><div class="edit-block">[edit mode...]</div></div></div><div class="tm-item"><div class="view-mode"><div class="entity-name"><span>Quick link to states settings from board</span></div><div class="edit-block">[edit mode...]</div></div></div><div class="tm-item"><div class="view-mode"><div class="entity-name"><span>Quick link to states settings from board</span></div><div class="edit-block">[edit mode...]</div></div></div></div>');                                 
+                  
+                  	return testcasetd;
+                  
+		};
+
+                /*
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		 Start of Add New Template
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		*/
                 
                 addNewTemplate = function(){
                 	
                 		var savedata = {  };
                         	//savedata["Tasks"] = { };
-                    		savedata["Tasks"] = '[{"Name" : "bbbbbb","Description" : "bbbbb"},{"Name" : "aaaaaaa","Description" : "aaaaaa"}]';
+                    		savedata["Tasks"] = '[]';
                 		savedata["Name"] = 'New Template';
 	                        savedata["TaskCount"] = '0';
 	                        savedata["TestCaseCount"] = '0';
@@ -319,13 +456,26 @@ var applyTemplate = function() {
                                  
 		};
                 
+                
+                saveTasks = function(newtasks, key, item){
+        		
+                	item.taskCount = newtasks.length.toString();
+                      	newtasks = JSON.stringify(newtasks);
+                	item.tasks = newtasks;
+                	saveTemplate(item, key);
+                                                              
+		};
+                
+                
+                
                 saveTemplate = function(savedata, key){
                 		
                 
-                		//count tasks?
-                  		//count testcases?
-                    
-
+	                        
+                        	debug('======');
+                          	debug('saving');
+                              	debug(savedata);
+                        	debug('======');
                 
                     		$.ajax({
                     			type: 'POST',
@@ -340,10 +490,12 @@ var applyTemplate = function() {
                     		contentType: 'application/json; charset=utf8',
 		                success: function(){
                                         debug("yay!");
+                          		return true;
                       		}, 
        		    		error: function(){
                                         debug("boo!");
                                 	rebuildTemplateTable();
+                                  	return false;
                                 }
                 		});
                 
@@ -352,7 +504,11 @@ var applyTemplate = function() {
                 
                 
                 
-                
+		/*
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		 Start of Remove Template
+		 =-=-=-=-=-=-=-=-=-=-=-=-=-
+		*/
                 
                 function removeTemplate(templatename){
         
