@@ -57,7 +57,7 @@ var applyTemplate = function() {
                             				if(data.data.children.length > 0){
                                                                 if( data.data.children[0].name.indexOf("Template") != -1) {
                                                                         //Only run on the template tab
-									//startApplyTemplate(data);
+									startApplyTemplate(data);
                               					}
                               				}
 						}
