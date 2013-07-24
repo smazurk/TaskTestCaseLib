@@ -877,12 +877,19 @@ var applyTemplate = function() {
 	                        var postdata = {};
 				postdata.Name = testcase.Name;
 			        postdata.Project = {'Id' : output.Items[0].Project.Id};
-              			postdata.UserStory = { 'Id' : _userstoryid }
-                                postdata.Steps = testcase.Steps;
-		                postdata.Success = testcase.Success;
+              			postdata.UserStory = { 'Id' : _userstoryid };
                                 
+                               	if(testcase.Steps.length > 0){
+                                postdata.Steps = testcase.Steps;
+                                }else{
+                                	postdata.Steps = " ";
+                                }
+                                if(testcase.Success.length > 0){
+		                postdata.Success = testcase.Success;
+                                }else{
+                                postdata.Success = " ";
+                                }
                                 postTemplateData(postdata, "testcases");
-                                            
 			}
                         
 			for (var i = 0; i < tasks.length; i++) {
