@@ -218,6 +218,7 @@ var applyTemplate = function() {
 			actions.append($('<button class="tau-btn tau-attention">Delete</button>').click(function() {
 				removeTemplate(item.key);
 				debug("Delete button pressed");
+                                       return false;
 			}));
                                           
                                           	
@@ -456,7 +457,10 @@ var applyTemplate = function() {
 						$(this).closest('.tm-item').find('.view-mode > .entity-name > span').attr('contentEditable', false);
                                                                     	
                                                                 	
-					}                                                                                
+					} 
+                                        
+                                        //So it doesn't refresh in tp2
+                                        return false;
                                                                                                                                             
 			});
                         
