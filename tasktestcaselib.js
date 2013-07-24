@@ -167,7 +167,7 @@ var applyTemplate = function() {
                                 $(this).parent().addClass("active");
                                 $(this).parent().siblings(".edit-line").removeAttr('style');                                                                                                                                                                                                                                        
                                 $(this).parent().next().css("display","table-row");
-                            	$(this).parent().next().find('.view-mode:not(:has(.entity-name.placeholder))').removeClass('active');                                        		
+                            	$(this).parent().next().find('.view-mode:not(:has(.entity-name.tm-placeholder))').removeClass('active');                                        		
           	      		debug("Template TD Clicked");
 			}));
                                 		
@@ -267,7 +267,7 @@ var applyTemplate = function() {
                                                         //build object for when a new task is created.                                                                             
                                                         var taskline = $('<div class="tm-item"></div>');
                                   
-                                                        taskline.append('<div class="view-mode active"><div class="entity-name placeholder"></div><div class="edit-block"><div class="note">Description</div><div class="description" contenteditable="true"></div><div class="action-buttons"></div></div></div>');                                                                             
+                                                        taskline.append('<div class="view-mode active"><div class="entity-name tm-placeholder"></div><div class="edit-block"><div class="note">Description</div><div class="tm-description" contenteditable="true"></div><div class="action-buttons"></div></div></div>');                                                                             
                                                         
                                       			$(this).parent().parent().children('.tm-body').prepend(taskline);
                                                        	
@@ -277,9 +277,9 @@ var applyTemplate = function() {
                                         		
                                             		var taskname = $('<span contenteditable="true">Name</span>').click(function() {
                                                                                                                            
-                                                                if($(this).parents('.entity-name').hasClass("placeholder")){                                                          
+                                                                if($(this).parents('.entity-name').hasClass("tm-placeholder")){                                                          
                                                                 	$(this).text('');
-			                                                $(this).parents('.entity-name').removeClass('placeholder');
+			                                                $(this).parents('.entity-name').removeClass('tm-placeholder');
                                               				debug('TaskName Clicked'); 
                                                 			
                                               			}
@@ -289,14 +289,14 @@ var applyTemplate = function() {
                                               	
                                                 	
                                                 
-                                                	$(this).parents('.td-task').find('.entity-name.placeholder').first().append(taskname);
+                                                	$(this).parents('.td-task').find('.entity-name.tm-placeholder').first().append(taskname);
                                                 
                                             
                                         		var addtask = $('<button class="tau-btn tau-success left">Add task</button>').click(function() {
                                                                 
                                                                 debug('Add Task Clicked');                                                                            
                                                                 var taskname = $(this).parents('.tm-item').find('.entity-name > span').html();
-                                                		var taskdesc = $(this).parents('.edit-block').children('.description').html();
+                                                		var taskdesc = $(this).parents('.edit-block').children('.tm-description').html();
                                                                 
                                                     		//TODO: Make sure they are not blank
                                                                 if(true){
@@ -333,7 +333,7 @@ var applyTemplate = function() {
                                                         			
                                                         			debug("New task item clicked (gogo edit mode)"); 
                     								
-                                						$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.placeholder))').removeClass('active');                                        		
+                                						$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.tm-placeholder))').removeClass('active');                                        		
 										$(this).parent().addClass("active");
 										$(this).parent().find('.entity-name > span').attr('contentEditable', true);
                                                                         
@@ -433,7 +433,7 @@ var applyTemplate = function() {
                 		                if(found >= 0){
                                                         newdata.Name = name;
                                                         if(buttontype == "task"){
-								var desc = $(this).parents('.edit-block').children('.description').html();
+								var desc = $(this).parents('.edit-block').children('.tm-description').html();
                       						newdata.Description = desc;
                 	        		        	datalist.splice(found,1,newdata);
         	               			        	saveTasks(item, datalist);
@@ -537,13 +537,13 @@ var applyTemplate = function() {
         	            	debug("task item clicked (gogo edit mode)"); 
                     			
                                 debug($(this).parent());
-                          	$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.placeholder))').removeClass('active');
+                          	$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.tm-placeholder))').removeClass('active');
 				$(this).parent().addClass("active");
 				$(this).parent().find('.entity-name > span').attr('contentEditable', true);                                                                                                                         
                                                                                                                                                 
 			});
                         
-                	var desc = $('<div class="edit-block"><div class="note">Description</div><div class="description" contenteditable="true">' + task.Description + '</div><div class="action-buttons"></div></div>');
+                	var desc = $('<div class="edit-block"><div class="note">Description</div><div class="tm-description" contenteditable="true">' + task.Description + '</div><div class="action-buttons"></div></div>');
                       	
                         taskitem.find('.view-mode').append(name);
                         taskitem.find('.view-mode').append(desc);                        
@@ -575,9 +575,9 @@ var applyTemplate = function() {
                                                 //build object for when a new testcase is created.                                                                             
                                                 var testcaseline = $('<div class="tm-item"></div>');
                           
-                                                //testcaseline.append('<div class="view-mode active"><div class="entity-name placeholder"></div><div class="edit-block"><div class="note">Description</div><div class="description" contenteditable="true"></div><div class="action-buttons"></div></div></div>');                                                                             
+                                                //testcaseline.append('<div class="view-mode active"><div class="entity-name tm-placeholder"></div><div class="edit-block"><div class="note">Description</div><div class="tm-description" contenteditable="true"></div><div class="action-buttons"></div></div></div>');                                                                             
                                                 
-                            			testcaseline.append('<div class="view-mode active"><div class="entity-name placeholder"></div><div class="edit-block"><div class="note">Steps</div><div class="description" contenteditable="true"></div><div class="note">Success</div><div class="description" contenteditable="true"></div><div class="action-buttons"></div></div></div>');
+                            			testcaseline.append('<div class="view-mode active"><div class="entity-name tm-placeholder"></div><div class="edit-block"><div class="note">Steps</div><div class="tm-description" contenteditable="true"></div><div class="note">Success</div><div class="tm-description" contenteditable="true"></div><div class="action-buttons"></div></div></div>');
                             
                               			$(this).parent().parent().children('.tm-body').prepend(testcaseline);
                                                	
@@ -587,9 +587,9 @@ var applyTemplate = function() {
                                 		
                                     		var testcasename = $('<span contenteditable="true">Name</span>').click(function() {
                                                                                                                    
-                                                        if($(this).parents('.entity-name').hasClass("placeholder")){                                                          
+                                                        if($(this).parents('.entity-name').hasClass("tm-placeholder")){                                                          
                                                         	$(this).text('');
-	                                                $(this).parents('.entity-name').removeClass('placeholder');
+	                                                $(this).parents('.entity-name').removeClass('tm-placeholder');
                                       				debug('TestCase Clicked'); 
                                         			
                                       			}
@@ -599,7 +599,7 @@ var applyTemplate = function() {
                                       	
                                         	
                                         
-                                        	$(this).parents('.td-test-case').find('.entity-name.placeholder').first().append(testcasename);
+                                        	$(this).parents('.td-test-case').find('.entity-name.tm-placeholder').first().append(testcasename);
                                         
                                     
                                 		var addtestcase = $('<button class="tau-btn tau-success left">Add Test Case</button>').click(function() {
@@ -645,7 +645,7 @@ var applyTemplate = function() {
                                                 			
                                                 			debug("New testcase item clicked (gogo edit mode)"); 
             								
-                        						$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.placeholder))').removeClass('active');                                        		
+                        						$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.tm-placeholder))').removeClass('active');                                        		
 									$(this).parent().addClass("active");
 									$(this).parent().find('.entity-name > span').attr('contentEditable', true);
                                                                 
@@ -712,13 +712,13 @@ var applyTemplate = function() {
         	            	debug("task item clicked (gogo edit mode)"); 
                     			
                                 debug($(this).parent());
-                          	$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.placeholder))').removeClass('active');
+                          	$(this).parents('.tm-body').find('.view-mode:not(:has(.entity-name.tm-placeholder))').removeClass('active');
 				$(this).parent().addClass("active");
 				$(this).parent().find('.entity-name > span').attr('contentEditable', true);                                                                                                                         
                                                                                                                                                 
 			});
                         
-                	var desc = $('<div class="edit-block"><div class="note">Steps</div><div class="description" contenteditable="true">' + testcase.Steps + '</div><div class="note">Success</div><div class="description" contenteditable="true">' + testcase.Success + '</div><div class="action-buttons"></div></div>');
+                	var desc = $('<div class="edit-block"><div class="note">Steps</div><div class="tm-description" contenteditable="true">' + testcase.Steps + '</div><div class="note">Success</div><div class="tm-description" contenteditable="true">' + testcase.Success + '</div><div class="action-buttons"></div></div>');
                       	
                         testcaseitem.find('.view-mode').append(name);
                         testcaseitem.find('.view-mode').append(desc);                        
@@ -850,7 +850,7 @@ var applyTemplate = function() {
                                     success: function(){debug("yay!");
                                                         rebuildTemplateTable();
                                                         }, 
-                                    error: function(){debug("boo!");}
+                                    error: function(){debug("failed removing!");}
                                 });
           
 	        };
@@ -1098,8 +1098,8 @@ $('head').append('<style type="text/css">'
 +'.tm-grid .edit-line .tm-item .active .entity-name {padding: 8px;}'
 +'.tm-grid .edit-line .tm-item .active .entity-name span,'
 +'.tm-grid .edit-line .tm-item .active:hover .entity-name span {background-color: #fff;border: solid 1px #cbd1d6;border-top-color: #a3a7ab;padding: 2px 7px;min-width: 150px;color: #16343b;font-weight: 600;display: block;height: 18px;line-height: 18px;}'
-+'.tm-grid .edit-line .tm-item .active .entity-name.placeholder span{font-weight: normal;color: #acb6bf;}'
-+'.tm-grid .edit-line .description {background-color: #fff;border: solid 1px #cbd1d6;border-top-color: #a3a7ab;padding: 7px;min-width: 150px;color: #16343b;display: block;line-height: 16px;min-height: 55px;}'
++'.tm-grid .edit-line .tm-item .active .entity-name.tm-placeholder span{font-weight: normal;color: #acb6bf;}'
++'.tm-grid .edit-line .tm-description {background-color: #fff;border: solid 1px #cbd1d6;border-top-color: #a3a7ab;padding: 7px;min-width: 150px;color: #16343b;display: block;line-height: 16px;min-height: 55px;}'
 +'.tm-grid .edit-line .note {font-size: 11px;color: #acb6bf;padding-top: 8px;padding-bottom: 2px;}'
 +'.tm-grid .edit-line .action-buttons {padding-top: 10px;overflow: hidden;}'
 +'.tm-grid .edit-line .action-buttons .tau-btn.left {float: left;}'
