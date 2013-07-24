@@ -26,14 +26,17 @@ tau.mashups.addDependency('tp/userStory/view')
     tau.mashups 
     .addDependency('app.bus') 
     .addDependency('tau/configurator')
-    .addMashup(function ($deferred, configurator) { 
+    .addDependency('tau/core/bus.reg')
+    .addMashup(function ($deferred, configurator,r) { 
  	
                
 var applyTemplate = function() {
-                                
+               
+    				
+		      
                 addCSS();
-    
-		console.log('hello');
+    		
+		debug('hello');
       
       	
 		
@@ -894,8 +897,13 @@ var applyTemplate = function() {
                         
                     	});
                     
-        		
-               		location.reload();
+                        
+               		r.getByName('entity component', function(b) 
+                            { 
+                             debug('refreshing');
+                             debug(b);
+                             b.fire('refreshMainEntity');                                
+			     });
             		
                
             	
@@ -994,6 +1002,9 @@ new applyTemplate().init();
 function addTP2CSS(){
 
 //Needed for when running in TP2 Mode
+
+
+
                      
 };
 
