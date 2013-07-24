@@ -34,17 +34,25 @@ var applyTemplate = function() {
                
     				
 		      
-                addCSS();
+               
     		
 		debug('hello');
-      
-      	
+      		var pathname = window.location.pathname;
+                
+                debug(pathname.toLowerCase());
+                
+                if(pathname.toLowerCase().indexOf('/restui/tpview.aspx') != -1 ){
+            		debug('TP2 Additional CSS Needed');
+                	addTP2CSS();
+                
+                }
+      		 addCSS();
 		
 		this.init = function() {
 			
 			this._userstoryid = 0;
 			$deferred.then(function(bus) {
-
+				
                                        
 				bus.on('afterRenderAll', function(evt, data) {
 					
@@ -80,7 +88,7 @@ var applyTemplate = function() {
 
 		startApplyTemplate = function(eventdata) {
                                                           
-		console.log("event");
+		debug("event");
                 $element = eventdata.element;
                 var id = eventdata.data.context.entity.id;
 		this._userstoryid = id;
@@ -88,7 +96,6 @@ var applyTemplate = function() {
                 $element.find('.tm-add-btn').click(function(){
                 
                       	addNewTemplate();
-                	console.log("Hiya!");
                                                   
 		});
                 
@@ -126,7 +133,7 @@ var applyTemplate = function() {
                 async: false,
                 contentType: 'application/json; charset=utf8',
 				success: function(data) {
-                                        console.log(data);                 
+                                        debug(data);                 
                                         $.each(data.items, function(k,item) {
 
 	     
@@ -134,9 +141,9 @@ var applyTemplate = function() {
                               			$table.append(buildInfoRow(item));
                                                 $table.append(buildEditRow(item));
                                 		
-                                		console.log(item.key);
-                                  		console.log(item.publicData);
-//                                              //console.log();
+                                		debug(item.key);
+                                  		debug(item.publicData);
+						
                                 
 				        });    
                                         
@@ -738,8 +745,8 @@ var applyTemplate = function() {
 	                        savedata["TestCaseCount"] = '0';
                             	
                           	
-                            	console.log(savedata);
-                          	console.log(JSON.stringify(savedata));
+                            	debug(savedata);
+                          	debug(JSON.stringify(savedata));
                 
                     		$.ajax({
                     			type: 'POST',
@@ -834,7 +841,7 @@ var applyTemplate = function() {
         
                                               
                                               
-          	  	console.log('remove template' + templatename);
+          	  	debug('remove template' + templatename);
                 
                         $.ajax({
                                     type: 'DELETE',
@@ -857,8 +864,8 @@ var applyTemplate = function() {
                                                       
                                                       
                                                       
-                	console.log('apply details');
-                   	console.log(item.publicData);
+                	debug('apply details');
+                   	debug(item.publicData);
 			var tasks = $.parseJSON(item.publicData.tasks);
                 
                 
@@ -922,10 +929,9 @@ var applyTemplate = function() {
                                   	contentType: 'application/json',
         				data: JSON.stringify(postdata), 
         				success: function(){ 
-                                                            //in the future add role efforts for tasks after created?
-                                                            console.log("yay!");
+                                                            debug("add success");
                                                             }, 
-       					error: function(){console.log("boo!");}
+       					error: function(){debug("add failed");}
     					
                                       }); 
                         	                   
@@ -936,7 +942,7 @@ var applyTemplate = function() {
        	function getProjectID(handleData) {
         
         
-        console.log('us id :' + this._userstoryid);
+        debug('us id :' + this._userstoryid);
                 $.ajax({
                         async: false,
                         type: 'GET',
@@ -965,7 +971,7 @@ var applyTemplate = function() {
 
 
 	/*
-        fix the input from the text boxes
+        fix the input from the text boxes (not needed, using spans now)
         */
 		function fixInput(s) {
 
@@ -1003,17 +1009,37 @@ function addTP2CSS(){
 
 //Needed for when running in TP2 Mode
 
+$('head').append('<style type="text/css">'
+                 
++'.tau-btn{font-family:OpenSans,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:11px;font-weight:600;display:inline-block;vertical-align:middle;cursor:pointer;margin:0 2px;border-radius:3px;padding:3px 9px 5px 9px;height:24px;line-height:16px;white-space:nowrap;text-shadow:0 1px #fff;color:#606c7b;border:solid 1px #acb3ba;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9ImczOTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRkZGRkYiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiNFOEU4RTgiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2czOTIpIiAvPgo8L3N2Zz4=);background-image:-webkit-linear-gradient(bottom,#e8e8e8,#fff);background-image:-moz-linear-gradient(bottom,#e8e8e8,#fff);background-image:linear-gradient(to top,#e8e8e8,#fff)}'
++'.tau-btn::-moz-focus-inner{border:0;padding:0}'
++'.tau-btn:focus{box-shadow:0 0 0 1px rgba(255,255,255,0.3),0 0 7px 0 #52a8ec;outline:0}'
++'.tau-btn:hover:not(:disabled){background:#f2f2f2;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc4MDQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRkZGRkYiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiNENkQ2RDYiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2c4MDQpIiAvPgo8L3N2Zz4=);background-image:-webkit-linear-gradient(bottom,#d6d6d6,#fff);background-image:-moz-linear-gradient(bottom,#d6d6d6,#fff);background-image:linear-gradient(to top,#d6d6d6,#fff)}'
++'.tau-btn:active:not(:disabled){box-shadow:none;background:#f2f2f2;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc1MjAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMTAwJSIgeTE9IjEwMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgo8c3RvcCBzdG9wLWNvbG9yPSIjRkZGRkZGIiBvZmZzZXQ9IjAiLz48c3RvcCBzdG9wLWNvbG9yPSIjRDZENkQ2IiBvZmZzZXQ9IjEiLz4KPC9saW5lYXJHcmFkaWVudD4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNnNTIwKSIgLz4KPC9zdmc+);background:-moz-linear-gradient(top,#e6e6e6 0,#fff 100%);background:-webkit-linear-gradient(top,#e6e6e6 0,#fff 100%);background:linear-gradient(top,#e6e6e6 0,#fff 100%)}'
++'.tau-btn:disabled{box-shadow:none;cursor:default;border-color:#d7d7d7;color:#d7d7d7}'
++'.tau-btn:disabled:before{opacity:.2}'
++'.tau-btn.tau-btn-small{height:20px;line-height:12px;padding:3px 8px 5px 8px}'
++'.tau-btn.tau-primary{text-shadow:0 -1px #2479b2;color:#fff;background:#3f99eb;border:solid 1px #0088d6;box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35);background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc2MjMiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiMwMDk5RjEiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiMwMDg5RDciIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2c2MjMpIiAvPgo8L3N2Zz4=);background-image:-webkit-linear-gradient(top,#0099f1,#0089d7);background-image:-moz-linear-gradient(top,#0099f1,#0089d7);background-image:linear-gradient(to bottom,#0099f1,#0089d7)}'
++'.tau-btn.tau-primary:not(:focus){border-color:#347bbc}'
++'.tau-btn.tau-primary:hover:not(:disabled){box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35);background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc5NjQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiMzQ0FFRjkiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiMwMDc5QzkiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2c5NjQpIiAvPgo8L3N2Zz4=);background-image:-webkit-linear-gradient(top,#3caef9,#0079c9);background-image:-moz-linear-gradient(top,#3caef9,#0079c9);background-image:linear-gradient(to bottom,#3caef9,#0079c9)}'
++'.tau-btn.tau-primary:active:not(:disabled){border-color:#347bbc;text-shadow:0 -1px 1px rgba(0,0,0,0.3);box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35);background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9ImczNCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIxMDAlIiB5MT0iMTAwJSIgeDI9IjEwMCUiIHkyPSIwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiMzQ0FFRjkiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiMwMDc5QzkiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2czNCkiIC8+Cjwvc3ZnPg==);background-image:-webkit-linear-gradient(bottom,#3caef9,#0079c9);background-image:-moz-linear-gradient(bottom,#3caef9,#0079c9);background-image:linear-gradient(to top,#3caef9,#0079c9)}'
++'.tau-btn.tau-danger{text-shadow:0 -1px #a03537;color:#fff;box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35);border:solid 1px #bf3f41;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9ImcxMjUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj4KPHN0b3Agc3RvcC1jb2xvcj0iI0VCNEU1MCIgb2Zmc2V0PSIwIi8+PHN0b3Agc3RvcC1jb2xvcj0iI0RBNDg0QSIgb2Zmc2V0PSIxIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjZzEyNSkiIC8+Cjwvc3ZnPg==);background-image:-webkit-linear-gradient(top,#eb4e50,#da484a);background-image:-moz-linear-gradient(top,#eb4e50,#da484a);background-image:linear-gradient(to bottom,#eb4e50,#da484a)}'
++'.tau-btn.tau-danger:not(:focus){border-color:#c24d4b}'
++'.tau-btn.tau-danger:hover:not(:disabled){background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc0ODUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGODVGNjEiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiNDOTQyNDQiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2c0ODUpIiAvPgo8L3N2Zz4=);background-image:-webkit-linear-gradient(top,#f85f61,#c94244);background-image:-moz-linear-gradient(top,#f85f61,#c94244);background-image:linear-gradient(to bottom,#f85f61,#c94244)}'
++'.tau-btn.tau-danger:active:not(:disabled){border-color:#c24d4b;text-shadow:0 -1px #c24d4b;box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35);background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc0MDYiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMTAwJSIgeTE9IjEwMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgo8c3RvcCBzdG9wLWNvbG9yPSIjRjg1RjYxIiBvZmZzZXQ9IjAiLz48c3RvcCBzdG9wLWNvbG9yPSIjQzk0MjQ0IiBvZmZzZXQ9IjEiLz4KPC9saW5lYXJHcmFkaWVudD4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNnNDA2KSIgLz4KPC9zdmc+);background-image:-webkit-linear-gradient(bottom,#f85f61,#c94244);background-image:-moz-linear-gradient(bottom,#f85f61,#c94244);background-image:linear-gradient(to top,#f85f61,#c94244)}'
++'.tau-btn.tau-attention:hover:not(:disabled){text-shadow:0 -1px #a03537;color:#fff;box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35);border-color:#bf3f41;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc0ODUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGODVGNjEiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiNDOTQyNDQiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2c0ODUpIiAvPgo8L3N2Zz4=);background-image:-webkit-linear-gradient(top,#f85f61,#c94244);background-image:-moz-linear-gradient(top,#f85f61,#c94244);background-image:linear-gradient(to bottom,#f85f61,#c94244)}'
++'.tau-btn.tau-success{text-shadow:0 -1px 0 #56891f;color:#fff;background-color:#a1c94b;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc2NjMiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMTAwJSIgeTE9IjEwMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgo8c3RvcCBzdG9wLWNvbG9yPSIjN0NBODQzIiBvZmZzZXQ9IjAiLz48c3RvcCBzdG9wLWNvbG9yPSIjQTFDOTRCIiBvZmZzZXQ9IjEiLz4KPC9saW5lYXJHcmFkaWVudD4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNnNjYzKSIgLz4KPC9zdmc+);background-image:-moz-linear-gradient(bottom,#7ca843,#a1c94b);background-image:-webkit-linear-gradient(bottom,#7ca843,#a1c94b);background-image:linear-gradient(to top,#7ca843,#a1c94b);-webkit-box-shadow:0 1px rgba(255,255,255,.4),inset 0 2px rgba(255,255,255,.35);-moz-box-shadow:0 1px rgba(255,255,255,.4),inset 0 2px rgba(255,255,255,.35);box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35)}'
++'.tau-btn.tau-success:not(:focus){border-color:#699836}'
++'.tau-btn.tau-success:hover:not(:disabled){border-color:#699836;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9Imc1ODgiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMTAwJSIgeTE9IjEwMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgo8c3RvcCBzdG9wLWNvbG9yPSIjNkY5NjNDIiBvZmZzZXQ9IjAiLz48c3RvcCBzdG9wLWNvbG9yPSIjQjRFMTU0IiBvZmZzZXQ9IjEiLz4KPC9saW5lYXJHcmFkaWVudD4KPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNnNTg4KSIgLz4KPC9zdmc+);background-image:-moz-linear-gradient(bottom,#6f963c,#b4e154);background-image:-webkit-linear-gradient(bottom,#6f963c,#b4e154);background-image:linear-gradient(to top,#6f963c,#b4e154)}'
++'.tau-btn.tau-success:active:not(:disabled){border-color:#699836;text-shadow:0 -1px #6c8b34;background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPgo8bGluZWFyR3JhZGllbnQgaWQ9ImcxMjMiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjAlIiB5Mj0iMTAwJSI+CjxzdG9wIHN0b3AtY29sb3I9IiM3Q0E4NDMiIG9mZnNldD0iMCIvPjxzdG9wIHN0b3AtY29sb3I9IiNBMUM5NEIiIG9mZnNldD0iMSIvPgo8L2xpbmVhckdyYWRpZW50Pgo8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2cxMjMpIiAvPgo8L3N2Zz4=);background-image:-moz-linear-gradient(top,#7ca843,#a1c94b);background-image:-webkit-linear-gradient(top,#7ca843,#a1c94b);background-image:linear-gradient(to bottom,#7ca843,#a1c94b);-webkit-box-shadow:0 1px rgba(255,255,255,.4),inset 0 2px rgba(255,255,255,.35);-moz-box-shadow:0 1px rgba(255,255,255,.4),inset 0 2px rgba(255,255,255,.35);box-shadow:0 1px rgba(255,255,255,.4),inset 0 1px rgba(255,255,255,.35)}'
++'.tau-btn.tau-danger:focus,.tau-btn.tau-primary:focus,.tau-btn.tau-attention:focus,.tau-btn.tau-success:focus{box-shadow:0 0 0 1px rgba(255,255,255,0.3),0 0 7px 0 #52a8ec;outline:0}'
 
-
++'</style>');
                      
 };
 
 
 function addCSS(){
-
-console.log('adding css');
-
-
 
 $('head').append('<style type="text/css">'
 +'.templates-mashap { padding: 20px 0 20px 20px; font-size: 13px; font-family: OpenSans, Arial, Helvetica, sans-serif; color: #16343b;}'
