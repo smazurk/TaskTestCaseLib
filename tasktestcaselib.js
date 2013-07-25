@@ -997,7 +997,7 @@ var applyTemplate = function() {
 
 		function debug(message){
                 
-               		if(true){
+               		if(false){
                         	console.log(message);         
 			}
                 
@@ -1110,7 +1110,7 @@ $('head').append('<style type="text/css">'
 +'.tm-grid .edit-line .tm-item .active .entity-name span,'
 +'.tm-grid .edit-line .tm-item .active:hover .entity-name span {background-color: #fff;border: solid 1px #cbd1d6;border-top-color: #a3a7ab;padding: 2px 7px;min-width: 150px;color: #16343b;font-weight: 600;display: block;height: 18px;line-height: 18px;}'
 +'.tm-grid .edit-line .tm-item .active .entity-name.tm-placeholder span{font-weight: normal;color: #acb6bf;}'
-+'.tm-grid .edit-line .tm-description {background-color: #fff;border: solid 1px #cbd1d6;border-top-color: #a3a7ab;padding: 7px;min-width: 150px;color: #16343b;display: block;line-height: 16px;min-height: 55px;}'
++'.tm-grid .edit-line .tm-description {background-color: #fff;border: solid 1px #cbd1d6;border-top-color: #a3a7ab;padding: 7px;min-width: 150px;color: #16343b;display: block;line-height: 16px;min-height: 55px;font-weight:normal;}'
 +'.tm-grid .edit-line .note {font-size: 11px;color: #acb6bf;padding-top: 8px;padding-bottom: 2px;}'
 +'.tm-grid .edit-line .action-buttons {padding-top: 10px;overflow: hidden;}'
 +'.tm-grid .edit-line .action-buttons .tau-btn.left {float: left;}'
